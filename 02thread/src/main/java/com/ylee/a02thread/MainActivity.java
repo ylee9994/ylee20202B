@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     SeekBar sb1, sb2;
     TextView tvSeek;
     Button btnStart;
+    BackgroundThread thread1, thread2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,31 +32,36 @@ public class MainActivity extends AppCompatActivity {
         tvSeek = findViewById(R.id.tvSeek);
         btnStart = findViewById(R.id.btnStart);
 
+        thread1 = new BackgroundThread(sb1, 2);
+        thread2 = new BackgroundThread(sb2, 1);
+
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                thread1.start();
+                thread2.start();
 //                for(int i=0; i<100; ++i){
 //                    sb1.setProgress(sb1.getProgress()+2);
 //                    sb2.setProgress(sb2.getProgress()+1);
 //                    SystemClock.sleep(100);
 //                }
-                new Thread(){
-                    public void run(){
-                        for(int i=0; i< 100; i=i+2){
-                            sb1.setProgress(sb1.getProgress()+2);
-                            SystemClock.sleep(100);
-                        }
-                    }
-                }.start();
-
-                new Thread(){
-                    public void run(){
-                        for(int i=0; i< 100; i=i+1){
-                            sb2.setProgress(sb2.getProgress()+1);
-                            SystemClock.sleep(100);
-                        }
-                    }
-                }.start();
+//                new Thread(){
+//                    public void run(){
+//                        for(int i=0; i< 100; i=i+2){
+//                            sb1.setProgress(sb1.getProgress()+2);
+//                            SystemClock.sleep(100);
+//                        }
+//                    }
+//                }.start();
+//
+//                new Thread(){
+//                    public void run(){
+//                        for(int i=0; i< 100; i=i+1){
+//                            sb2.setProgress(sb2.getProgress()+1);
+//                            SystemClock.sleep(100);
+//                        }
+//                    }
+//                }.start();
             }
         });
         sb1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -100,5 +106,23 @@ public class MainActivity extends AppCompatActivity {
                 pb1.incrementProgressBy(-10);
             }
         });
+    }
+
+    // inner class 내부클래스
+    class BackgroundThread extends Thread{
+        SeekBar seekBar;
+        int diff;
+
+        public  BackgroundThread(SeekBar sbar, int diff){
+            seekBar = sbar;
+            this.diff = diff;
+        }
+
+        public void run(){
+            for(int i=0; i<100; i++){
+                seekBar.setProgress(seekBar.getProgress()+diff);
+                SystemClock.sleep(100);
+            }
+        }
     }
 }
