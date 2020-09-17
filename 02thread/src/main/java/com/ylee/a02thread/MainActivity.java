@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvSeek;
     Button btnStart;
     BackgroundThread thread1, thread2;
-    BackgroundTask task1, task2;
+    BackgroundTask task1, task2, task3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +37,15 @@ public class MainActivity extends AppCompatActivity {
         thread1 = new BackgroundThread(sb1, 2);
         thread2 = new BackgroundThread(sb2, 1);
         task1 = new BackgroundTask();
+        task2 = new BackgroundTask(sb1, 1);
+        task3 = new BackgroundTask(sb2, 2);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                task1.execute();
+                task2.execute();
+                task3.execute();
+                //task1.execute();
 //                thread1.start();
 //                thread2.start();
 //                for(int i=0; i<100; ++i){
@@ -136,11 +140,22 @@ public class MainActivity extends AppCompatActivity {
     class BackgroundTask extends AsyncTask<Integer, Integer, Integer>{
         // abstract, 추상클래스
         // 추상클래스: 적어도 하나 이상의 추상메소드
-
-        int value;
+        SeekBar sb = sb1;
+        int diff = 1;
+        int value =0 ;
 
         public BackgroundTask() {
             super();
+        }
+
+        // polymorphism 다형성
+        public BackgroundTask(SeekBar psb, int pdif){
+            sb = psb;
+            diff = pdif;
+        }
+
+        public BackgroundTask(SeekBar psb){
+            sb = psb;
         }
 
         @Override
@@ -157,14 +172,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            sb1.setProgress(values[0].intValue());
+            sb.setProgress(values[0].intValue());
         }
 
 
         @Override
         protected Integer doInBackground(Integer... integers) {
             for(int i=0; i<100; i++){
-                value = value + 2;
+                value = value + diff;
                 publishProgress(value);
                 SystemClock.sleep(100);
             }
