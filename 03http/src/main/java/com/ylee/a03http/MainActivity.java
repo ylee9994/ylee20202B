@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     String naverurl = "https://m.naver.com";
     String htmldata = null;
+    String sourceurl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,48 +30,56 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.urledit);
         button = findViewById(R.id.nbutton);
         textView = findViewById(R.id.textView);
+        sourceurl = naverurl;
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RequestThread rthread = new RequestThread();
                 rthread.start();
-                SystemClock.sleep(5000);
-                textView.setText(htmldata);
+               // SystemClock.sleep(5000);
+                // textView.setText(htmldata);
             }
         });
     }
 
     class RequestThread extends Thread{
         public void run(){
-            try {
-                URL url = new URL(naverurl);
-                HttpURLConnection conn = (HttpURLConnection)
-                        url.openConnection();
-                if(conn != null){
-                    conn.setConnectTimeout(10000);
-                    conn.setRequestMethod("GET");
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    int resCode = conn.getResponseCode();
-                    BufferedReader reader = new BufferedReader
-                            (new InputStreamReader(conn.getInputStream()));
-                    String line;
-                    htmldata = "RR";
-                    while (true){
-                        line = reader.readLine();
-                        if(line == null){
-                            break;
-                        }
-                        htmldata += line;
-                    }
-                    reader.close();
-                    conn.disconnect();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+            htmldata = getHTTPdata(sourceurl);
+            textView.setText(htmldata);
+         }
+    }
 
+    public String getHTTPdata(String urlStrl){
+        String rdata = null;
+        try {
+            URL url = new URL(urlStrl);
+            HttpURLConnection conn = (HttpURLConnection)
+                    url.openConnection();
+            if(conn != null){
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                int resCode = conn.getResponseCode();
+                BufferedReader reader = new BufferedReader
+                        (new InputStreamReader(conn.getInputStream()));
+                String line;
+                line = reader.readLine();
+                rdata = line;
+                while (true){
+                    line = reader.readLine();
+                    if(line == null){
+                        break;
+                    }
+                    rdata += line;
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return rdata;
     }
 }

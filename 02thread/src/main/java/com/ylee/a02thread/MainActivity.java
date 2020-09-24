@@ -37,14 +37,16 @@ public class MainActivity extends AppCompatActivity {
         thread1 = new BackgroundThread(sb1, 2);
         thread2 = new BackgroundThread(sb2, 1);
         task1 = new BackgroundTask();
-        task2 = new BackgroundTask(sb1, 1);
-        task3 = new BackgroundTask(sb2, 2);
+
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                task2.execute();
-                task3.execute();
+               // task2.execute();
+                task2 = new BackgroundTask(sb1, 1);
+                task3 = new BackgroundTask(sb2, 2);
+                task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 //task1.execute();
 //                thread1.start();
 //                thread2.start();
