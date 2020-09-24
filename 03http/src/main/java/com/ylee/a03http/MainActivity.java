@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     String naverurl = "https://m.naver.com";
     String urlStr = "https://api.openweathermap.org/data/2.5/forecast?&APPID=3e0c533ec49a146af626992e6bcce23f&lat=36.1444292&lon=128.391079&mode=xml&units=metric&cnt=15";;
-    String openweatherapi = "https://api.openweathermap.org/data/2.5/weather?&mode=json&units=metric&appid=3e0c533ec49a146af626992e6bcce23f&q=seoul";
+    String openweatherapi = "https://api.openweathermap.org/data/2.5/weather?&mode=xml&units=metric&appid=3e0c533ec49a146af626992e6bcce23f&q=seoul";
     String busapi = "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid?serviceKey=vJm8%2BGpTs1b6mG2%2FB%2Ff31iZqhHXyrrnEN8FjnIBUUwaD6fwqu1kY0dDpH4LBNbNVONA43%2Bt88%2BUWxFloMwKv6A%3D%3D&busRouteId=100100414";
     String airpollutionapi="http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=vJm8%2BGpTs1b6mG2%2FB%2Ff31iZqhHXyrrnEN8FjnIBUUwaD6fwqu1kY0dDpH4LBNbNVONA43%2Bt88%2BUWxFloMwKv6A%3D%3D&numOfRows=20&pageNo=1&sidoName=서울&ver=1.3";
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.urledit);
         button = findViewById(R.id.nbutton);
         textView = findViewById(R.id.textView);
-        sourceurl = naverurl;
+        sourceurl = openweatherapi;
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
