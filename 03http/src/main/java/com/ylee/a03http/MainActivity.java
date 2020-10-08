@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     TextView textView;
     String naverurl = "https://m.naver.com";
+    String openapi = "https://api.openweathermap.org/data/2.5/weather?&mode=json&units=metric&appid=3e0c533ec49a146af626992e6bcce23f&q=seoul";
+
 
     String htmldata = null;
     String sourceurl = null;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.urledit);
         button = findViewById(R.id.nbutton);
         textView = findViewById(R.id.textView);
-        sourceurl = naverurl;
+        sourceurl = openapi;
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
