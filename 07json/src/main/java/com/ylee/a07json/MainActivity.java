@@ -10,12 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +48,84 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                parseJSONforecast(jsonforecast);
+                parseJSONdata(jsondata);
             }
         });
+    }
+
+    public void parseJSONdata(String odata){
+        Integer humidityval=0;
+        Integer pressureval = 0;
+        Double  tempval=0.0;
+        Double  lon = 0.0, lat = 0.0;
+        String  countryval = null;
+        Long udate = 0L;
+        Date date = null;
+        SimpleDateFormat format1 = null;
+        try {
+            JSONObject jsonObject = new JSONObject(odata);
+            JSONObject jmain = jsonObject.getJSONObject("main");
+            humidityval = jmain.getInt("humidity");
+            tempval = jmain.getDouble("temp");
+            pressureval = jmain.getInt("pressure");
+
+            JSONObject jcoord = jsonObject.getJSONObject("coord");
+            lon = jcoord.getDouble("lon");
+            lat = jcoord.getDouble("lat");
+
+            JSONObject jsys = jsonObject.getJSONObject("sys");
+            countryval = jsys.getString("country");
+
+            udate = jsonObject.getLong("dt");
+            date = new Date(udate * 1000);
+            format1 =
+                    new SimpleDateFormat("EHH:mm:ssyyyy년MM월dd일");
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("JSONParsing", "Parsing Error");
+        }
+        temp.setText(tempval.toString());
+        humidity.setText(humidityval.toString());
+        location.setText("Long: " + lon + " Lat: " + lat );
+        pressure.setText(pressureval + " hPa");
+        country.setText(countryval);
+        updates.setText(format1.format(date));
+    }
+
+    public void parseJSONforecast(String odata){
+        Integer humidity;
+        Double temperature;
+        String presult = null;
+
+        if(odata == null){
+            textView.setText("데이터없음");
+            return;
+        }
+
+        presult = "Forecast\n";
+        try{
+            JSONObject jsonObject = new JSONObject(odata);
+            JSONArray jArray = jsonObject.getJSONArray("list");
+            for(int i=0; i<jArray.length(); ++i){
+                JSONObject jlist = jArray.getJSONObject(i);
+                Long udate = jlist.getLong("dt");
+                Date date = new Date(udate * 1000);
+                SimpleDateFormat dateFormat =
+                        new SimpleDateFormat("yyyy-MM-ddEHH:mm:ss");
+                JSONObject jmain = jlist.getJSONObject("main");
+                temperature = jmain.getDouble("temp");
+                humidity = jmain.getInt("humidity");
+                presult += dateFormat.format(date) +
+                        " temperature = " + temperature + ", " +
+                        "humidity = " + humidity + "\n";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("JSONParsing", "Parsing Error");
+        }
+        textView.setText(presult);
     }
 }

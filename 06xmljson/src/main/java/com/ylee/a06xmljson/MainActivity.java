@@ -13,6 +13,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
     String xmldata = "<current>\n" +
@@ -333,6 +335,8 @@ public class MainActivity extends AppCompatActivity {
     TextView updates, country, location, temp, humidity, pressure;
     Button button;
 
+    ArrayList<SBooks> BooksArray = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -396,10 +400,8 @@ public class MainActivity extends AppCompatActivity {
                         if(eventType == XmlPullParser.TEXT){
                             price = xpp.getText();
                             fprice = Float.parseFloat(price);
-                            if(fprice <= 40.0f) {
-                                presult += "저자:" + author + "제목:" +
-                                        title + "가격:" + price + "\n";
-                            }
+                            SBooks abook = new SBooks(author, title, fprice);
+                            BooksArray.add(abook);
                         }
                     }
                 }
@@ -408,6 +410,27 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.e("xml parsing", "Parsing error", e);
         }
+
+        // 일반적인 for 문장
+//        for(int i=0; i<BooksArray.size(); ++i){
+//            SBooks abook = BooksArray.get(i);
+//            if(abook.price <= 40.0f){
+//                presult  += "저자: " + abook.author +
+//                        " 제목: " + abook.title +
+//                        " 가격"  + abook.price + "$" + "\n";
+//            }
+//        }
+
+        Collections.sort(BooksArray);
+        // for each 문으로 재프로그램
+        for( SBooks abook:BooksArray){
+            if(abook.price <= 40.0f){
+                presult  += "저자: " + abook.author +
+                        " 제목: " + abook.title +
+                        " 가격"  + abook.price + "$" + "\n";
+            }
+        }
+
         textView.setText(presult);
     }
 

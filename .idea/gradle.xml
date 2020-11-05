@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/02thread" />
             <option value="$PROJECT_DIR$/03http" />
             <option value="$PROJECT_DIR$/06xmljson" />
+            <option value="$PROJECT_DIR$/07json" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
